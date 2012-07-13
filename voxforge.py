@@ -99,7 +99,7 @@ def random_subcorpora(*args):
         del allfiles[:count]
 
         dirname = join(RESAMPLED, name)
-        os.mkdir(dirname)
+        os.makedirs(dirname)
 
         key = open(join(dirname, 'PROMPTS'), 'w')
         for fn, p, pid, text in sample:
