@@ -101,14 +101,20 @@ def random_subcorpora(*args):
         dirname = join(RESAMPLED, name)
         os.makedirs(dirname)
 
-        key = open(join(dirname, 'PROMPTS'), 'w')
+        transcription = open(join(dirname, 'transcription'), 'w')
+        fileids = open(join(dirname, 'fileids'), 'w')
+        prompts = open(join(dirname, 'PROMPTS'), 'w')
         for fn, p, pid, text in sample:
             pid = pid.replace('/', '-')
             convert_one(fn,
                         join(dirname, pid + '.wav'))
-            print >> key, "%s %s" % (pid, text)
+            print >> prompts, "%s %s" % (pid, text)
+            print >> fileids, "%s" % (pid,)
+            print >> transcription, "<s> %s </s> (%s)" % (text.upper(), pid)
 
-        key.close()
+
+        prompts.close()
+        fileids.close()
 
 
 
