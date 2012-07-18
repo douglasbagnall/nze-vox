@@ -9,6 +9,7 @@ import random
 ROOT = os.path.dirname(os.path.abspath(__file__))
 CORPUS = os.path.join(ROOT, 'corpora/voxforge')
 RESAMPLED = os.path.join(ROOT, 'corpora/resampled')
+CMUDICT = os.path.join(ROOT, 'cmudict.0.7a')
 
 def resample_pipeline(filename, outfilename, rate):
     uri = 'file://' + os.path.abspath(filename)
@@ -43,7 +44,26 @@ def test_convert():
                             os.path.join('/tmp', fn))
 
 
-
+_cmudict = None
+def lookup_words(words):
+    global _cmudict
+    if _cmudict is None:
+        _cmudict = {}
+        f = open(CMUDICT)
+        for line in f:
+            k, v = line.split(None, 1)
+            if '(' in k:
+                k = k[:k.index('(')]
+            values = _cmudict.setdefault(k, [])
+            values.append(line)
+    lines = []
+    failures = set()
+    for word in words:
+        if word in _cmudict:
+            lines.extend(_cmudict[word])
+        else:
+            failures.add(word)
+    return sorted(lines), sorted(failures)
 
 def random_subcorpora(*args):
     """arguments are name1, count1, name2, count2, ...
@@ -99,11 +119,15 @@ def random_subcorpora(*args):
         del allfiles[:count]
 
         dirname = join(RESAMPLED, name)
-        os.makedirs(dirname)
-
+        try:
+            os.makedirs(dirname)
+        except OSError:
+            #probably already exists
+            pass
         transcription = open(join(dirname, 'transcription'), 'w')
         fileids = open(join(dirname, 'fileids'), 'w')
         prompts = open(join(dirname, 'PROMPTS'), 'w')
+        words = set()
         for fn, p, pid, text in sample:
             pid = pid.replace('/', '-')
             convert_one(fn,
@@ -111,13 +135,18 @@ def random_subcorpora(*args):
             print >> prompts, "%s %s" % (pid, text)
             print >> fileids, "%s" % (pid,)
             print >> transcription, "<s> %s </s> (%s)" % (text.upper(), pid)
-
+            words.update(text.upper().split())
 
         prompts.close()
         fileids.close()
 
-
-
+        dict_lines, failures = lookup_words(words)
+        dic = open(join(dirname, 'words.dic'), 'w')
+        for line in sorted(dict_lines):
+            print >> dic, line
+        dic.close()
+        if failures:
+            print "unfound words: %s" % (failures,)
 
 
 #test_convert()
