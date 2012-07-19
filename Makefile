@@ -83,7 +83,7 @@ corpora/resampled/%/$(MODEL):
 	 -cepext .wav \
 	 -ctl test/fileids \
 	 -lm $(CURDIR)/lm/language_model.arpaformat.DMP \
-	 -dict ./test/words.dic \
+	 -dict $(CURDIR)/cmudict.0.7a \
 	 -hmm $(MODEL_DIR)/$(MODEL) \
 	 -hyp test/before.hyp
 
@@ -94,7 +94,7 @@ corpora/resampled/%/$(MODEL):
 	 -cepext .wav \
 	 -ctl test/fileids \
 	 -lm $(CURDIR)/lm/language_model.arpaformat.DMP \
-	 -dict ./test/words.dic \
+	 -dict $(CURDIR)/cmudict.0.7a \
 	 -hmm $(MODEL) \
 	 -hyp test/adapted.hyp
 
