@@ -55,7 +55,7 @@ def lookup_words(words):
             if '(' in k:
                 k = k[:k.index('(')]
             values = _cmudict.setdefault(k, [])
-            values.append(line)
+            values.append(line.strip())
     lines = []
     failures = set()
     for word in words:
