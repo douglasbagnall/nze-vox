@@ -7,7 +7,7 @@ TEST_N = 20
 SPHINXTRAIN_BIN = $(CURDIR)/sphinxtrain-bin
 SPHINXTRAIN_PYTHON = $(CURDIR)/sphinxtrain-python
 SPHINXTRAIN_PERL = $(CURDIR)/sphinxtrain-perl
-MODEL_DIR = $(CURDIR)/pocketsphinx-extra/model/hmm/en_US/
+MODEL_DIR = $(CURDIR)/am
 
 BW = $(SPHINXTRAIN_BIN)/bw
 
