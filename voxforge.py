@@ -6,6 +6,8 @@ import gst
 import sys, os
 import random
 
+from cmudict import lookup_words
+
 ROOT = os.path.dirname(os.path.abspath(__file__))
 CORPUS = os.path.join(ROOT, 'corpora/voxforge')
 RESAMPLED = os.path.join(ROOT, 'corpora/resampled')
@@ -44,26 +46,6 @@ def test_convert():
                             os.path.join('/tmp', fn))
 
 
-_cmudict = None
-def lookup_words(words):
-    global _cmudict
-    if _cmudict is None:
-        _cmudict = {}
-        f = open(CMUDICT)
-        for line in f:
-            k, v = line.split(None, 1)
-            if '(' in k:
-                k = k[:k.index('(')]
-            values = _cmudict.setdefault(k, [])
-            values.append(line.strip())
-    lines = []
-    failures = set()
-    for word in words:
-        if word in _cmudict:
-            lines.extend(_cmudict[word])
-        else:
-            failures.add(word)
-    return sorted(lines), sorted(failures)
 
 def random_subcorpora(*args):
     """arguments are name1, count1, name2, count2, ...
