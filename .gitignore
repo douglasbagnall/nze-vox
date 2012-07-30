@@ -5,3 +5,9 @@
 *.so
 *.d
 .emacs*
+cmusphinx-svn
+sphinxtrain-bin
+sphinxtrain-perl
+sphinxtrain-python
+pocketsphinx-extra
+junk
