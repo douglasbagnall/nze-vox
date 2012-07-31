@@ -12,7 +12,7 @@ while read -r line; do
     echo "## $line"
     echo
     for word in $line; do
-        grep -i "^$word[([:space:]]" $DICT | while read -r result; do
+        (grep -i "^$word[([:space:]]" $DICT || echo "${word} missing!") | while read -r result; do
             echo "    $result"
         done
     done
