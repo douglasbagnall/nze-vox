@@ -1,17 +1,22 @@
 #!/usr/bin/python
 import sys
 
+import re
+
 def read(f):
     for line in f:
         d = eval(line)
         yield d
 
 def lexicon(f, priorities):
+    space_re = re.compile("\s")
     for d in read(f):
         if 'term' not in d:
             print >> sys.stderr, d
             continue
         term = d['term']
+        if space_re.search(term):
+            continue
         for p in priorities:
             if p in d:
                 pron = d[p]
