@@ -5,6 +5,7 @@ from xml.etree.cElementTree import iterparse
 
 import bz2
 import re
+import sys
 
 in_page = False
 in_body = False
