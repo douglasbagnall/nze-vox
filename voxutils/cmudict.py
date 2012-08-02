@@ -1,8 +1,7 @@
-import os
+from os.path import dirname, join, abspath
 
-ROOT = os.path.dirname(os.path.abspath(__file__))
-CMUDICT = os.path.join(ROOT, 'cmudict.0.7a')
-
+ROOT = dirname(dirname(abspath(__file__)))
+CMUDICT = join(ROOT, 'dict', 'cmudict.0.7a')
 
 _cmudict = None
 def lookup_words(words):

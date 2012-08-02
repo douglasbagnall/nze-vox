@@ -1,51 +1,15 @@
 #!/usr/bin/python
 
-import pygst
-pygst.require("0.10")
-import gst
 import sys, os
 import random
 
-from cmudict import lookup_words
+from voxutils.cmudict import lookup_words
+from voxutils.resample import convert_one
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 CORPUS = os.path.join(ROOT, 'corpora/voxforge')
 RESAMPLED = os.path.join(ROOT, 'corpora/resampled')
 CMUDICT = os.path.join(ROOT, 'cmudict.0.7a')
-
-def resample_pipeline(filename, outfilename, rate):
-    uri = 'file://' + os.path.abspath(filename)
-    s = ("uridecodebin uri=%s "
-         "! audioconvert "
-         "! audio/x-raw-int,channels=1,width=16,depth=16 "
-         "! audioresample "
-         "! audio/x-raw-int, rate=%s "
-         "! wavenc "
-         "! filesink location=%s"
-         % (uri, rate, outfilename))
-    print s
-    pipeline = gst.parse_launch(s)
-    return pipeline
-
-def convert_one(filename, outfilename=None, rate=16000):
-    if outfilename is None:
-        outfilename = '%s-%s.wav' % (filename.rsplit('.', 1)[0], rate)
-    pipeline = resample_pipeline(filename, outfilename, rate)
-    pipeline.set_state(gst.STATE_PLAYING)
-
-
-def test_convert():
-    import random
-    random.seed(1)
-    for d in os.listdir(CORPUS):
-        for subdir in ('wav', 'flac'):
-            wavdir = os.path.join(CORPUS, d, subdir)
-            if os.path.exists(wavdir):
-                fn = random.choice(os.listdir(wavdir))
-                convert_one(os.path.join(wavdir, fn),
-                            os.path.join('/tmp', fn))
-
-
 
 def random_subcorpora(*args):
     """arguments are name1, count1, name2, count2, ...

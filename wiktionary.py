@@ -21,7 +21,6 @@ IPA_re = re.compile("""(?:\{\{a\|(.*)\}\}.*)?
 
 lang_re = re.compile("lang=[\w.-]+", re.M)
 
-
 def parse(f):
     data = {}
     for event, e in iterparse(f):#, events=('start', 'end')):
