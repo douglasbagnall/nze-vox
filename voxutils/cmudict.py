@@ -1,7 +1,4 @@
-from os.path import dirname, join, abspath
-
-ROOT = dirname(dirname(abspath(__file__)))
-CMUDICT = join(ROOT, 'dict', 'cmudict.0.7a')
+from voxutils.paths import CMUDICT
 
 _cmudict = None
 def lookup_words(words):
