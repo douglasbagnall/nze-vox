@@ -6,14 +6,7 @@ import sys, os
 from os.path import join
 
 from voxutils.resample import convert_one
-from voxutils.paths import CORPORA_DIR, RESAMPLED_DIR
-
-IGNORED_CORPORA = ['resampled', '16k']
-BASE_CORPORA = ['voxforge', 'wellington', 'hansard']
-
-CORPORA = {x: os.path.join(CORPORA_DIR, x) for x in BASE_CORPORA}
-RESAMPLED_16k = os.path.join(CORPORA_DIR, '16k')
-
+from voxutils.paths import CORPORA_DIR, RESAMPLED_16K_DIR, IGNORED_CORPORA
 
 def log(*msgs):
     for m in msgs:
@@ -91,13 +84,13 @@ def resample_corpus(corpus_dir, resample_dir, force=False):
     prompts.close()
     fileids.close()
     transcription.close()
-    vocab = open(join(etc_dir, 'vocab'), 'w')
+    vocab = open(join(etc_dir, 'vocab'), 'a')
     for word in sorted(words):
         print >> vocab, word
     vocab.close()
 
 
-def main(target=RESAMPLED_16k):
+def main(target=RESAMPLED_16K_DIR):
     if '--append' in sys.argv:
         sys.argv.remove('--append')
     else:
