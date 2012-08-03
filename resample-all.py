@@ -9,7 +9,7 @@ from voxutils.resample import convert_one
 from voxutils.paths import CORPORA_DIR, RESAMPLED_DIR
 
 IGNORED_CORPORA = ['resampled', '16k']
-BASE_CORPORA = ['voxforge', 'wellington']
+BASE_CORPORA = ['voxforge', 'wellington', 'hansard']
 
 CORPORA = {x: os.path.join(CORPORA_DIR, x) for x in BASE_CORPORA}
 RESAMPLED_16k = os.path.join(CORPORA_DIR, '16k')
@@ -24,7 +24,10 @@ def read_prompt_file(path):
     f = open(path)
     for line in f:
         fn, transcript = line.strip().split(None, 1)
-        base_id = fn.rsplit('/', 1)[1]
+        if '/' in fn:
+            base_id = fn.rsplit('/', 1)[1]
+        else:
+            base_id = fn
         uid = fn.replace('/', '-')
         ids.append([base_id, fn, uid, transcript])
     f.close()
@@ -50,7 +53,6 @@ def prompt_file_gen(corpus):
                 wavdir = join(root, subdir)
                 wavfiles = {x.rsplit('.', 1)[0] : x for x in os.listdir(wavdir)}
                 for x in ids:
-                    #print x
                     base_id = x[0]
                     if base_id in wavfiles:
                         x.append(join(wavdir, wavfiles[base_id]))
@@ -70,9 +72,9 @@ def resample_corpus(corpus_dir, resample_dir, force=False):
         if e.errno != EEXIST:
             raise
 
-    transcription = open(join(etc_dir, 'transcription'), 'w')
-    fileids = open(join(etc_dir, 'fileids'), 'w')
-    prompts = open(join(etc_dir, 'PROMPTS'), 'w')
+    transcription = open(join(etc_dir, 'transcription'), 'a')
+    fileids = open(join(etc_dir, 'fileids'), 'a')
+    prompts = open(join(etc_dir, 'PROMPTS'), 'a')
     words = set()
 
     for base_id, fn, pid, transcript, wavfile in prompt_file_gen(corpus_dir):
@@ -95,14 +97,21 @@ def resample_corpus(corpus_dir, resample_dir, force=False):
     vocab.close()
 
 
-def main():
+def main(target=RESAMPLED_16k):
+    if '--append' in sys.argv:
+        sys.argv.remove('--append')
+    else:
+        for fn in ('fileids', 'PROMPTS', 'transcription', 'vocab'):
+            fn = os.path.join(target, 'etc', fn)
+            os.rename(fn, fn + '~')
+
     corpora = sys.argv[1:]
     if corpora == []:
         corpora = [x for x in os.listdir(CORPORA_DIR) if x not in IGNORED_CORPORA]
 
     for c in corpora:
         d = CORPORA[c]
-        resample_corpus(d, RESAMPLED_16k)
+        resample_corpus(d, target)
 
 
 main()
