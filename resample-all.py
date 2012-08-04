@@ -1,11 +1,23 @@
 #!/usr/bin/python
+"""Resample and collate corpora, storing the result in corpora/16k
+
+./resample-all.py [--force] [--append] [--help] [[<corpus>]...]
+
+If corpora are listed on the command line, only those subdirectories
+of ./corpora/ will be used. The default is to use all corpora except
+the already resampled ones.
+
+If --force is given, already resampled files will be overwritten.
+
+--apend adds to the existing metadata rather than writing it afresh.
+"""
 from voxutils.resample import convert_one
 
 from errno import EEXIST
 import sys, os
 from os.path import join
 
-from voxutils.resample import convert_one
+from voxutils.resample import convert_one, gst_init
 from voxutils.paths import CORPORA_DIR, RESAMPLED_16K_DIR, IGNORED_CORPORA
 
 def log(*msgs):
@@ -91,20 +103,32 @@ def resample_corpus(corpus_dir, resample_dir, force=False):
 
 
 def main(target=RESAMPLED_16K_DIR):
+    if '--help' in sys.argv or '-h' in sys.argv:
+        print __doc__
+        sys.exit()
+    if '--force' in sys.argv:
+        sys.argv.remove('--force')
+        force = True
+    else:
+        force = False
     if '--append' in sys.argv:
         sys.argv.remove('--append')
     else:
         for fn in ('fileids', 'PROMPTS', 'transcription', 'vocab'):
             fn = os.path.join(target, 'etc', fn)
-            os.rename(fn, fn + '~')
+            try:
+                os.rename(fn, fn + '~')
+            except OSError, e:
+                log("%s does not exist" % fn)
 
+    gst_init()
     corpora = sys.argv[1:]
     if corpora == []:
         corpora = [x for x in os.listdir(CORPORA_DIR) if x not in IGNORED_CORPORA]
 
     for c in corpora:
-        d = CORPORA[c]
-        resample_corpus(d, target)
+        d = join(CORPORA_DIR, c)
+        resample_corpus(d, target, force=force)
 
 
 main()

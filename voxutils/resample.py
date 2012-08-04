@@ -1,6 +1,10 @@
-import pygst
-pygst.require("0.10")
-import gst
+
+def gst_init():
+    global pygst, gst
+    import pygst
+    pygst.require("0.10")
+    import gst
+
 import sys, os
 
 
@@ -14,7 +18,7 @@ def resample_pipeline(filename, outfilename, rate):
          "! wavenc "
          "! filesink location=%s"
          % (uri, rate, outfilename))
-    print s
+    #print s
     pipeline = gst.parse_launch(s)
     return pipeline
 
