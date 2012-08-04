@@ -34,7 +34,7 @@ def read_prompt_file(path):
         else:
             base_id = fn
         uid = fn.replace('/', '-')
-        ids.append([base_id, fn, uid, transcript])
+        ids.append([base_id, uid, transcript])
     f.close()
     return ids
 
@@ -82,7 +82,7 @@ def resample_corpus(corpus_dir, resample_dir, force=False):
     prompts = open(join(etc_dir, 'PROMPTS'), 'a')
     words = set()
 
-    for base_id, fn, pid, transcript, wavfile in prompt_file_gen(corpus_dir):
+    for base_id, pid, transcript, wavfile in prompt_file_gen(corpus_dir):
         pid = pid.replace('/', '-')
         transcript = transcript.upper()
         newfn = os.path.join(wav_dir, pid + '.wav')
