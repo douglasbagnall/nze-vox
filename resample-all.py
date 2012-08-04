@@ -87,7 +87,7 @@ def resample_corpus(corpus_dir, resample_dir, force=False):
         transcript = transcript.upper()
         newfn = os.path.join(wav_dir, pid + '.wav')
         if force or not os.path.exists(newfn):
-            convert_one(fn, newfn)
+            convert_one(wavfile, newfn)
         print >> prompts, "%s %s" % (pid, transcript)
         print >> fileids, "%s" % (pid,)
         print >> transcription, "<s> %s </s> (%s)" % (transcript, pid)
