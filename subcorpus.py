@@ -1,6 +1,18 @@
 #!/usr/bin/python
-"""Select random selections of resampled files for training and
-testing purposes."""
+"""Select random exclusive selections of resampled files with approriate metadata.
+
+  ./subcorpus.py <name1> <N1> [[<name2> <N2>] <name3> <N3> ...]
+
+The selections go in corpora/resampled/<name>
+
+For example:
+
+ ./subcorpus.py ahundred 100 twenty 20 more 100
+
+will put 100 utterances in corpora/resampled/ahundred, 20 in
+corpora/resampled/twenty, and 100 in corpora/resampled/more. No
+utterance will be shared between corpora.
+"""
 
 import sys, os
 import random
@@ -84,6 +96,10 @@ def random_subcorpora(corpus, **kwargs):
 
 
 def main():
+    print sys.argv
+    if '--help' in sys.argv or '-h' in sys.argv or len(sys.argv) < 1:
+        print __doc__
+        sys.exit()
     kwargs = {}
     argv = sys.argv[1:]
     while argv:
