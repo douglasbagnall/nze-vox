@@ -17,7 +17,7 @@ from errno import EEXIST
 import sys, os
 from os.path import join
 
-from voxutils.resample import convert_one, gst_init
+from voxutils.resample import convert_one
 from voxutils.paths import CORPORA_DIR, RESAMPLED_16K_DIR, IGNORED_CORPORA
 
 def log(*msgs):
@@ -121,7 +121,6 @@ def main(target=RESAMPLED_16K_DIR):
             except OSError, e:
                 log("%s does not exist" % fn)
 
-    gst_init()
     corpora = sys.argv[1:]
     if corpora == []:
         corpora = [x for x in os.listdir(CORPORA_DIR) if x not in IGNORED_CORPORA]
