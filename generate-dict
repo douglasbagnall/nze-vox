@@ -1,0 +1,61 @@
+#!/usr/bin/python
+import os, sys
+import subprocess
+
+PHONE_MAP_DIR = "phone-maps"
+
+def vocab_gen(fn):
+    f = open(fn)
+    for line in f:
+        for word in line.split():
+            yield word.upper()
+    f.close()
+
+def load_conversion(conversion):
+    d = {}
+    f = open(os.path.join(PHONE_MAP_DIR, conversion))
+    for line in f:
+        line = line.strip()
+        if line[:3] == "###" or line == '':
+            continue
+        try:
+            native, arpa = line.split(None, 1)
+        except ValueError:
+            native = line
+            arpa = ''
+        if native == '+SPACE+':
+            native = ' '
+        d[native.decode("utf-8")] = arpa
+    return d
+
+
+
+def raw_espeak(word):
+        call = ["espeak", "-q", "--ipa", word]
+        #call = ["espeak", "-qx", word]
+        return subprocess.check_output(call).strip()
+
+
+def dict_espeak(vocab):
+    convertor = load_conversion("ipa-to-cmudict")
+    for word in vocab:
+        pron = raw_espeak(word).decode("utf-8")
+        arpa = []
+        for phoneme in pron:
+            arpa.append(convertor.get(phoneme))
+            if arpa[-1] is None:
+                print >> sys.stderr, "missing '%s' in %s : %s" % (phoneme, word, pron)
+                raise RuntimeError()
+        print ("%s  %s  %s" % (word, pron, ' '.join(arpa))).encode('utf-8')
+
+
+def main(dictname, vocab_files):
+    vocab = set()
+    for fn in vocab_files:
+        vocab.update(vocab_gen(fn))
+
+    f = globals().get("dict_" + dictname)
+    f(vocab)
+
+
+main(sys.argv[1], sys.argv[2:])
