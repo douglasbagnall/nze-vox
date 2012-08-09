@@ -26,7 +26,14 @@ def load_conversion(conversion):
         if native == '+SPACE+':
             native = ' '
         d[native.decode("utf-8")] = arpa
-    return d
+
+    tree = {}
+    for token, arpa in d.iteritems():
+        current = tree
+        for c in token:
+            current = current.setdefault(c, {})
+        current[''] = arpa
+    return tree
 
 
 
@@ -41,11 +48,16 @@ def dict_espeak(vocab):
     for word in vocab:
         pron = raw_espeak(word).decode("utf-8")
         arpa = []
-        for phoneme in pron:
-            arpa.append(convertor.get(phoneme))
-            if arpa[-1] is None:
-                print >> sys.stderr, "missing '%s' in %s : %s" % (phoneme, word, pron)
+        pos = 0
+        while pos < len(pron):
+            d = convertor
+            while pos < len(pron) and pron[pos] in d:
+                d = d[pron[pos]]
+                pos += 1
+            if d[''] is None:
+                print >> sys.stderr, "missing at positon %s: %s, %s" % (pos, word, pron)
                 raise RuntimeError()
+            arpa.append(d[''])
         print ("%s  %s  %s" % (word, pron, ' '.join(arpa))).encode('utf-8')
 
 
