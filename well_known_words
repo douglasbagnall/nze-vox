@@ -1,0 +1,33 @@
+#!/usr/bin/python
+import sys, os
+
+from voxutils.dictionaries import get_dict
+
+COMMON_WORDS_LIST = os.path.join('dict', 'wordlists', 'word_counts.txt')
+COMMON_WORDS_LIST2 = os.path.join('dict', 'wordlists', 'en.txt')
+
+
+def common_word_gen(fn=COMMON_WORDS_LIST):
+    f = open(fn)
+    for line in f:
+        yield(line.split()[0].upper())
+    f.close()
+
+def main():
+    cmudict = get_dict('cmudict')
+    beep = get_dict('beep')
+    n = int(sys.argv[1])
+    for word in common_word_gen():
+        if word in cmudict and word in beep:
+            print word
+            n -= 1
+            if n == 0:
+                break
+        elif word in cmudict:
+            print >> sys.stderr, 'beep lacks %s' % word
+        elif word in beep:
+            print >> sys.stderr, 'cmudict lacks %s' % word
+        else:
+            print >> sys.stderr, 'nobody knows %s' % word
+        
+main()
