@@ -1,0 +1,30 @@
+#!/usr/bin/python
+
+from collections import Counter
+import sys
+import re
+import gzip
+
+def count_words(text, d=None):
+    if d is None:
+        d = Counter()
+    words = re.findall(r"\b[a-z][a-z'-]*\b", text.lower())
+    d.update(words)
+    return d
+
+
+def main():
+    counter = Counter()
+    for fn in sys.argv[1:]:
+        if fn.lower().endswith('.gz'):
+            f = gzip.open(fn)
+        else:
+            f = open(fn)
+        text = f.read()
+        f.close()
+        count_words(text, counter)
+
+    for x in counter.most_common():
+        print "%s %s" % x
+
+main()
