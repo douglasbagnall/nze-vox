@@ -4,7 +4,7 @@ import re
 import os, sys
 from collections import namedtuple
 
-from voxutils.cmudict import lookup_words
+from voxutils.dictionaries import lookup_words
 
 def utterance_generator(f):
     utt = []
