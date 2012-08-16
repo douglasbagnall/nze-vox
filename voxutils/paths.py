@@ -13,4 +13,7 @@ BASE_CORPORA = ['voxforge', 'wellington', 'hansard']
 CORPORA = {x: join(CORPORA_DIR, x) for x in BASE_CORPORA}
 
 CMUDICT = join(DICT, 'cmudict.0.7a')
-
+UNISYN_DICT = join(DICT, 'unisyn-nz.txt')
+VOXFORGE_DICT = join(DICT, 'VoxForgeDict')
+BEEP_DICT = join(DICT, 'beep', 'beep-1.0')
+ESPEAK_DICT = join(DICT, 'espeak-corpus+50k.txt')
