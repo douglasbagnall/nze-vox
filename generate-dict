@@ -2,9 +2,10 @@
 import os, sys
 import subprocess
 
-from voxutils.dictionaries import lookup_words
+from voxutils.dictionaries import lookup_words as cmu_lookup
 
 PHONE_MAP_DIR = "phone-maps"
+DICT_DIR = "dict"
 
 def vocab_gen(fn):
     f = open(fn)
@@ -37,10 +38,8 @@ def load_conversion(conversion):
         current[''] = arpa
     return tree
 
-
-
 def raw_espeak(word):
-        call = ["espeak", "-q", "--ipa", word]
+        call = ["espeak", "-q", "--ipa", word.encode('utf-8')]
         #call = ["espeak", "-qx", word]
         return subprocess.check_output(call).strip()
 
@@ -48,20 +47,57 @@ def raw_espeak(word):
 def dict_espeak(vocab):
     convertor = load_conversion("ipa-to-cmudict")
     for word in vocab:
+        word = word.decode("utf-8")
+        if word[:2] == '++': # '++UM++' -> '+UM+', etc special cases
+            print ("%s %s" % (word, word[1:-1])).encode('utf-8')
+            continue
+
         pron = raw_espeak(word).decode("utf-8")
         arpa = []
         pos = 0
-        while pos < len(pron):
-            d = convertor
-            while pos < len(pron) and pron[pos] in d:
-                d = d[pron[pos]]
-                pos += 1
-            if d[''] is None:
-                print >> sys.stderr, "missing at positon %s: %s, %s" % (pos, word, pron)
-                raise RuntimeError()
-            arpa.append(d[''])
-        print ("%s  %s  %s" % (word, pron, ' '.join(arpa))).encode('utf-8')
+        try:
+            while pos < len(pron):
+                d = convertor
+                while pos < len(pron) and pron[pos] in d:
+                    d = d[pron[pos]]
+                    pos += 1
+                if d.get('') is None:
+                    raise TabError("missing phoneme at %s" % pos)
+                arpa.append(d[''])
+            print ("%s %s" % (word, ' '.join(arpa))).encode('utf-8')
+        except (UnicodeDecodeError, TabError), e:
+            print >> sys.stderr, e, word, pron, arpa
 
+def dict_espeak(vocab):
+    convertor = load_conversion("ipa-to-cmudict")
+    for word in vocab:
+        word = word.decode("utf-8")
+        if word[:2] == '++': # '++UM++' -> '+UM+', etc special cases
+            print ("%s %s" % (word, word[1:-1])).encode('utf-8')
+            continue
+
+        pron = raw_espeak(word).decode("utf-8")
+        arpa = []
+        pos = 0
+        try:
+            while pos < len(pron):
+                d = convertor
+                while pos < len(pron) and pron[pos] in d:
+                    d = d[pron[pos]]
+                    pos += 1
+                if d.get('') is None:
+                    raise TabError("missing phoneme at %s" % pos)
+                arpa.append(d[''])
+            print ("%s %s" % (word, ' '.join(arpa))).encode('utf-8')
+        except (UnicodeDecodeError, TabError), e:
+            print >> sys.stderr, e, word, pron, arpa
+
+def dict_cmu(vocab):
+    cmulines, missing = cmu_lookup(vocab)
+    for line in cmulines:
+        print line
+    for line in missing:
+        print >> sys.stderr, line
 
 def main(dictname, vocab_files):
     vocab = set()
