@@ -96,7 +96,6 @@ def random_subcorpora(corpus, **kwargs):
 
 
 def main():
-    print sys.argv
     if '--help' in sys.argv or '-h' in sys.argv or len(sys.argv) < 1:
         print __doc__
         sys.exit()
