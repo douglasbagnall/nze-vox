@@ -1,0 +1,34 @@
+#!/usr/bin/python
+
+#from voxutils import dictionaries
+from collections import Counter
+import sys, os
+
+def get_beep_examples():
+    f = open('beep-arpabet.txt')
+    d = {}
+    for line in f:
+        bits = line.split()
+        d[bits[0].upper()] = bits[4]
+    return d
+
+def main():
+    total = Counter()
+    counters = [total]
+    for d in ('cmu', 'beep', 'voxforge', 'espeak'):
+        f = open('dict/%s-corpus+10k.txt' % d)
+        counter = Counter()
+        counters.append(counter)
+        for line in f:
+            tokens = line.upper().split()
+            counter.update(tokens[1:])
+            total.update(tokens[1:])
+
+    examples = get_beep_examples()
+
+    print "phone    example %10s %10s %10s %10s %10s" % ("all", 'cmu', 'beep', 'voxforge', 'espeak')
+    for k, v in total.most_common():
+        print "%5s %10s %10s %10s %10s %10s %10s" % tuple([k, examples.get(k, '-')] +
+                                                     [x.get(k, '') for x in counters])
+
+main()
