@@ -2,7 +2,7 @@
 import os, sys
 import subprocess
 
-from voxutils.dictionaries import lookup_words as cmu_lookup
+from voxutils.dictionaries import lookup_words
 
 PHONE_MAP_DIR = "phone-maps"
 DICT_DIR = "dict"
@@ -92,19 +92,25 @@ def dict_espeak(vocab):
         except (UnicodeDecodeError, TabError), e:
             print >> sys.stderr, e, word, pron, arpa
 
-def dict_cmu(vocab):
-    cmulines, missing = cmu_lookup(vocab)
-    for line in cmulines:
-        print line
-    for line in missing:
-        print >> sys.stderr, line
+
+def lut_dict_factory(dictname):
+    def f(vocab):
+        lines, missing = lookup_words(vocab, dictname)
+        for line in lines:
+            print line
+        for line in missing:
+            print >> sys.stderr, line
+    return f
+
+dict_cmu = lut_dict_factory('cmudict')
 
 def main(dictname, vocab_files):
     vocab = set()
     for fn in vocab_files:
         vocab.update(vocab_gen(fn))
 
-    f = globals().get("dict_" + dictname)
+    f = globals().get("dict_" + dictname,
+                      lut_dict_factory(dictname))
     f(vocab)
 
 
