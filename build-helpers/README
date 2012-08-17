@@ -1,0 +1,9 @@
+bw-opts lists the options of the bw sphinxtrain utility.  It is used
+to select the right options for bw from a model's feat.params file,
+thus:
+
+  grep -wF -f $(BW_OPTS) $(@D)/$(MODEL)/feat.params
+
+And was produced via something like this:
+
+  ./sphinxtrain-bin/bw 2>&1 | cut -f 1 |grep -F -- -

@@ -19,6 +19,7 @@ SPHINXTRAIN_PERL = $(CURDIR)/sphinxtrain-perl
 MODEL_DIR = $(CURDIR)/am
 
 BW = $(SPHINXTRAIN_BIN)/bw
+BW_OPTS = $(CURDIR)/build-helpers/bw-opts
 
 MODEL = hub4_wsj_sc_3s_8k.cd_semi_5000
 
@@ -60,18 +61,16 @@ corpora/resampled/%/$(MODEL): corpora/resampled/%/populated
 %/done_bw: %/have_mfc $(DICTIONARY)  %/$(MODEL)/mixture_weights  %/$(MODEL)/mdef.txt %/populated
 	cd $(@D) && \
 	$(BW) \
-	 -ts2cbfn .semi. \
-	 -feat 1s_c_d_dd \
-	 -svspec 0-12/13-25/26-38 \
 	 -hmmdir $(MODEL) \
 	 -moddeffn $(MODEL)/mdef.txt \
-	 -cmn current \
-	 -agc none \
 	 -dictfn $(DICTIONARY) \
 	 -ctlfn ./etc/fileids \
 	 -cepext mfc \
+	 -cepdir wav \
 	 -lsnfn ./etc/transcription \
-	 -accumdir ./
+	 -accumdir ./ \
+	 -ts2cbfn .semi. \
+	 $(shell grep -wF -f $(BW_OPTS) $(@D)/$(MODEL)/feat.params)
 	touch $@
 
 %/done_mapadapt: %/done_bw %/$(MODEL)
