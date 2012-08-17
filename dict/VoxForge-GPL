@@ -1,0 +1,63 @@
+License:
+
+Copyright (C) 2006 MacLean
+
+These files are free software; you can redistribute them and/or
+modify them under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+These files are distributed in the hope that they will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+
+## Date:  August 8, 1998
+##
+## The Carnegie Mellon Pronouncing Dictionary [cmudict.0.6] is Copyright 1998
+## by Carnegie Mellon University. Use of this dictionary, for any research or
+## commercial purpose, is completely unrestricted.  If you make use of or
+## redistribute this material, we would appreciate acknowlegement of its
+## origin.
+##
+## cmudict.0.6 is the fifth release of cmudict, first released as cmudict.0.1
+## in September of 1993.  There was no generally available public release 
+## of version 0.5.
+##
+## See the README in this directory before you use this dictionary.
+##
+## Thanks to Bill Huggins at BBN; Bill Fisher at NIST; Alex Hauptman,
+## Alex Rudnicky, Jack Mostow, Roni Rosenfeld, Richard Stern,
+## Matthew Siegler, Kevin Lenzo, Maxine Eskenazi, Mosur Ravishankar,
+## Eric Thayer, Kristie Seymore, and Raj Reddy at CMU; Lin Chase at
+## LIMSI; Doug Paul at MIT Lincoln Labs; Ben Serridge at MIT SLS; Murray 
+## Spiegel at Bellcore; Tony Robinson at Cambridge UK; David Bowness of 
+## CAE Electronics Ltd. and CRIM; Stephen Hocking; Jerry Quinn at BNR 
+## Canada, and Marshal Midden for bringing to our attention problems and 
+## inadequacies with the first releases. Most special thanks to Bob Weide 
+## for all his work on prior versions of the dictionary.
+##
+## We welcome input from users and will continue to acknowledge such input
+## in subsequent releases. If I failed to acknowledge your input in this
+## release, please remind me and I will update these comments. If I failed to
+## fix things that you brought to my attention, please remind me and have
+## patience. If I actually fixed things that you brought to my attention and
+## you appreciate it, I wouldn't mind a pat on the back.
+##
+## This version differs from previous releases of cmudict most significantly
+## in the addition of new words from the common ARPA tasks for 1996 and 1997.
+##
+## There are undoubtedly still errors and inconsistencies in this dictionary
+## so keep your eyes open for problems and mail them to me.
+##
+## We hope this dictionary is an improvement over cmudict.0.4.
+## 
+## email: cmudict@cs.cmu.edu
+## web:   http://www.speech.cs.cmu.edu/cgi-bin/cmudict
+## ftp:   ftp://ftp.cs.cmu.edu/project/speech/dict/
+##
+## Thank you for your continued interest in the CMU Pronouncing 
+## Dictionary.  Further addictions and improvements are planned
+## for forthcoming releases.
+##

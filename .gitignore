@@ -14,5 +14,7 @@
 /am/
 /corpora/
 /lm
-/dict/
 /wc_corpus/
+/dict/non-free/
+/dict/beep-*
+/dict/unisyn-*
