@@ -97,7 +97,7 @@ def lut_dict_factory(dictname):
     def f(vocab):
         lines, missing = lookup_words(vocab, dictname)
         for line in lines:
-            print line
+            print line.upper()
         for line in missing:
             print >> sys.stderr, line
     return f
