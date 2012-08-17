@@ -1,0 +1,13 @@
+en_50k.txt and en.txt were obtained from Hermit Dave:
+
+http://invokeit.wordpress.com/frequency-word-lists/
+
+They are apparently based on TV subtitles, and and are CC-BY-SA
+licenced. See http://creativecommons.org/licenses/by-sa/3.0/
+
+wordcounts.txt and wordcounts2.txt were made from a variety of
+corpora, including Wikipedia pages, irclogs, and the Enron corpus,
+using the `wordcounts` script in the root directory. No copyright.
+
+The 'wellknown' dictionaries have words that aren't in the
+dictionaries filtered out.

@@ -1,0 +1,1 @@
+../../corpora/16k/etc/vocab
