@@ -10,10 +10,10 @@
 /sphinxtrain-perl
 /sphinxtrain-python
 /pocketsphinx-extra
-/junk
+/junk/
 /am/
 /corpora/
-/lm
+/lm/
 /wc_corpus/
 /dict/non-free/
 /dict/beep-*
